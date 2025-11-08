@@ -24,5 +24,25 @@ playerImage.onload = () => {
   resizeCanvas(); // Initial draw
   window.addEventListener('resize', resizeCanvas); // Redraw on resize
 };
+window.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case'Arrowup':
+    case'w':
+    playerY -= speed;
+      break;
+    case 'ArrowDown':
+    case 's':
+      playerY += speed;
+      break;
+    case 'ArrowLeft':
+    case 'a':
+      playerX -= speed;
+      break;
+    case 'ArrowRight':
+    case 'd':
+      playerX += speed;
+      break;
+  }
 
-
+drawScene();
+});
