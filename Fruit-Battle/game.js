@@ -7,6 +7,7 @@ soundBeamImage.src = 'sound z.svg';
 const enemyImage =new Image();
 enemyImage.src = 'Base.svg';
 //Player stats & more!
+let knockback=5
 let lastAngle=0
 let mouseInsideCanvas = true;
 let soundBeam = null;
@@ -138,7 +139,6 @@ function checkBeamCollisions() {
       const dist = Math.sqrt(dx*dx + dy*dy);
 
     let damage = 0.5;
-
 const now = Date.now(); // current time in ms
 
 if (dist < enemy.width / 2) {
