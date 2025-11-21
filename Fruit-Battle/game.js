@@ -304,7 +304,7 @@ function checkBeamCollisions() {
       const now = Date.now();
 
       if (dist < enemy.width / 2) {
-        if (now - enemy.lastHitTime > 25) { // limit hits per enemy
+        if (now - enemy.lastHitTime > 40) { // limit hits per enemy
           let damage = 4;
 
           if (isTouchingPlayer(enemy)) {
@@ -342,7 +342,6 @@ function checkXLineCollisions() {
       const endX = startX + Math.cos(line.angle) * line.distance;
       const endY = startY + Math.sin(line.angle) * line.distance;
 
-      // Distance from enemy center to line segment
       const dx = endX - startX;
       const dy = endY - startY;
       const lengthSq = dx*dx + dy*dy;
@@ -352,25 +351,28 @@ function checkXLineCollisions() {
       const closestY = startY + t * dy;
       const dist = Math.sqrt((ex - closestX)**2 + (ey - closestY)**2);
 
-   if (dist < enemy.width/2) {
-        if (now - enemy.lastHitTime > 100) { // limit hits
-          enemy.hp -= 10; // damage per hit
+      if (dist < enemy.width/2) {
+        // Damage throttled
+        if (now - enemy.lastHitTime > 75) {
+          enemy.hp -= 15;
           enemy.hp = Math.max(0, enemy.hp);
           enemy.lastHitTime = now;
         }
-      }
-      
-      const dxFromPlayer = enemy.x + enemy.width / 2 - (playerX + playerWidth / 2);
-          const dyFromPlayer = enemy.y + enemy.height / 2 - (playerY + playerHeight / 2);
-          const distFromPlayer = Math.sqrt(dxFromPlayer * dxFromPlayer + dyFromPlayer * dyFromPlayer);
 
-          if (distFromPlayer > 0) {
-            enemy.x += (dxFromPlayer / distFromPlayer) * knockback/20;
-            enemy.y += (dyFromPlayer / distFromPlayer) * knockback/20;
-          }
+        // Knockback always on collision
+        const dxFromPlayer = ex - (playerX + playerWidth / 2);
+        const dyFromPlayer = ey - (playerY + playerHeight / 2);
+        const distFromPlayer = Math.sqrt(dxFromPlayer * dxFromPlayer + dyFromPlayer * dyFromPlayer);
+
+        if (distFromPlayer > 0) {
+          enemy.x += (dxFromPlayer / distFromPlayer) * (knockback/1.5);
+          enemy.y += (dyFromPlayer / distFromPlayer) * (knockback/1.5);
+        }
+      }
     });
   });
 }
+
 
 //enemy stats!
 const enemies=[];
